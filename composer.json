@@ -1,5 +1,6 @@
 {
   "name": "afragen/wordpress-plugin-readme-parser",
+  "description": "A clone of the current WordPress.org Plugin Readme Parser, class-parser.php",
   "type": "library",
   "keywords": [
     "wordpress",
