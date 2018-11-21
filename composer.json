@@ -20,6 +20,9 @@
     }
   ],
   "prefer-stable": true,
+  "config": {
+    "*": "dist"
+  },
   "require": {
     "php": ">=5.6",
     "erusev/parsedown": "^1.7"
