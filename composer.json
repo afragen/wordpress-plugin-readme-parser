@@ -30,7 +30,7 @@
   },
   "autoload": {
     "psr-0": {
-      "WordPressdotorg\\Plugin_Directory\\Readme\\Parser": ""
+      "WordPressdotorg\\Plugin_Directory\\Readme\\Parser\\": ""
     }
   }
 }
