@@ -29,8 +29,8 @@
     "erusev/parsedown": "^1.7"
   },
   "autoload": {
-    "psr-0": {
-      "WordPressdotorg\\Plugin_Directory\\Readme\\Parser\\": ""
-    }
+    "classmap": [
+      "class-parser.php"
+    ]
   }
 }
