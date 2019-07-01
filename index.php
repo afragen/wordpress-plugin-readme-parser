@@ -10,7 +10,7 @@ $content                = file_get_contents( 'https://meta.trac.wordpress.org/br
 if ( ! $content ) {
 	echo '<h2>Error getting file contents</h2>';
 }
-if ( ! file_put_contents( 'class-parser.php', $content ) ) {
+if ( ! file_put_contents( __DIR__ . '/class-parser.php', $content ) ) {
 	echo '<h2>Error updating class-parser.php</h2>';
 } else {
 	echo '<h2>class-parser.php updated</h2>';
