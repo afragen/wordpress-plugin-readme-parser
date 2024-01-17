@@ -60,6 +60,11 @@ class Parser {
 	/**
 	 * @var string
 	 */
+	public $short_description_raw = '';
+
+	/**
+	 * @var string
+	 */
 	public $license = '';
 
 	/**
@@ -327,6 +332,7 @@ class Parser {
 			$this->short_description .= $line . "\n";
 		}
 		$this->short_description = trim( $this->short_description );
+		$this->short_description_raw = $this->short_description;
 
 		/*
 		 * Parse the rest of the body.
