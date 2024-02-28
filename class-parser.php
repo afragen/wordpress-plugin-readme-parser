@@ -4,7 +4,7 @@ namespace WordPressdotorg\Plugin_Directory\Readme;
 use WordPressdotorg\Plugin_Directory\Markdown;
 
 /**
- * WordPress.org Plugin Readme Parser.
+ * WordPress.org Plugin Readme Parser!
  *
  * Based on Baikonur_ReadmeParser from https://github.com/rmccue/WordPress-Readme-Parser
  *
