@@ -6,7 +6,7 @@ use WordPressdotorg\Plugin_Directory\Markdown;
 /**
  * WordPress.org Plugin Readme Parser!
  *
- * Based on Baikonur_ReadmeParser from https://github.com/rmccue/WordPress-Readme-Parser
+ * Based on Baikonur_ReadmeParser from http://github.com/rmccue/WordPress-Readme-Parser
  *
  * @package WordPressdotorg\Plugin_Directory\Readme
  */
