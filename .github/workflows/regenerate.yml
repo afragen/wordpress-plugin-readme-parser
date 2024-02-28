@@ -1,0 +1,66 @@
+name: Regenerate file
+
+on:
+  pull_request:
+  workflow_call:
+
+jobs:
+
+  regenerate-file: #----------------------------------------------------------
+    name: Regenerate file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP environment
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Configure git user
+        run: |
+          git config --global user.email "nilambar@outlook.com"
+          git config --global user.name "Nilambar Sharma"
+
+      - name: Check if remote branch exists
+        run: echo "REMOTE_BRANCH_EXISTS=$([[ -z $(git ls-remote --heads origin regenerate-file) ]] && echo "0" || echo "1")" >> $GITHUB_ENV
+
+      - name: Create branch to base pull request on
+        if: env.REMOTE_BRANCH_EXISTS == 0
+        run: |
+          git checkout -b regenerate-file
+
+      - name: Fetch existing branch to add commits to
+        if: env.REMOTE_BRANCH_EXISTS == 1
+        run: |
+          git fetch --all --prune
+          git checkout regenerate-file
+          git pull --no-rebase
+
+      - name: Regenerate file
+        run: |
+          php index.php
+
+      - name: Check if there are changes
+        run: echo "CHANGES_DETECTED=$([[ -z $(git status --porcelain) ]] && echo "0" || echo "1")" >> $GITHUB_ENV
+
+      - name: Commit changes
+        if: env.CHANGES_DETECTED == 1
+        run: |
+          git add class-parser.php
+          git commit -m "Regenerate file - $(date +'%Y-%m-%d')"
+          git push origin regenerate-file
+
+      - name: Create pull request
+        if: |
+          env.CHANGES_DETECTED == 1 &&
+          env.REMOTE_BRANCH_EXISTS == 0
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: regenerate-file
+          destination_branch: ${{ github.event.repository.default_branch }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: Regenerate file
+          pr_body: "This is an automated pull-request"
+          pr_reviewer: ernilambar
