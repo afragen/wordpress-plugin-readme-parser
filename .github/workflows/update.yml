@@ -1,0 +1,70 @@
+name: Update parser
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+
+  update-parser: #----------------------------------------------------------
+    name: Update parser
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP environment
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Configure git user
+        run: |
+          git config --global user.email "andy@thefragens.com"
+          git config --global user.name "Andy Fragen"
+
+      - name: Check if remote branch exists
+        run: echo "REMOTE_BRANCH_EXISTS=$([[ -z $(git ls-remote --heads origin update-parser) ]] && echo "0" || echo "1")" >> $GITHUB_ENV
+
+      - name: Create branch to base pull request on
+        if: env.REMOTE_BRANCH_EXISTS == 0
+        run: |
+          git checkout -b update-parser
+
+      - name: Fetch existing branch to add commits to
+        if: env.REMOTE_BRANCH_EXISTS == 1
+        run: |
+          git fetch --all --prune
+          git checkout update-parser
+          git pull --no-rebase
+
+      - name: Fetch parser
+        run: |
+          php index.php
+
+      - name: Check if there are changes
+        run: echo "CHANGES_DETECTED=$([[ -z $(git status --porcelain) ]] && echo "0" || echo "1")" >> $GITHUB_ENV
+
+      - name: Commit changes
+        if: env.CHANGES_DETECTED == 1
+        run: |
+          git add class-parser.php
+          git commit -m "Update parser - $(date +'%Y-%m-%d')"
+          git push origin update-parser
+
+      - name: Create pull request
+        if: |
+          env.CHANGES_DETECTED == 1 &&
+          env.REMOTE_BRANCH_EXISTS == 0
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: update-parser
+          destination_branch: ${{ github.event.repository.default_branch }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: Update parser
+          pr_body: "This is an automated pull-request"
