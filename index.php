@@ -14,7 +14,7 @@ $stream_context_options = stream_context_create(
 
 $content = file_get_contents( 'https://meta.trac.wordpress.org/browser/sites/trunk/wordpress.org/public_html/wp-content/plugins/plugin-directory/readme/class-parser.php?format=txt', false, $stream_context_options );
 if ( ! $content ) {
-	echo '<h2>Error getting file contents</h2>';
+	exit(1);
 }
 if ( ! file_put_contents( __DIR__ . '/class-parser.php', $content ) ) {
 	echo '<h2>Error updating class-parser.php</h2>';
